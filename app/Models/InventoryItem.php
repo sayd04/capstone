@@ -12,6 +12,13 @@ class InventoryItem extends Model
     protected $fillable = [
         'name',
         'category',
+        'rice_variety_id',
+        'quality_grade',
+        'product_description',
+        'is_organic',
+        'harvest_date',
+        'expiry_date',
+        'moisture_content',
         'quantity',
         'price',
         'unit',
@@ -22,7 +29,19 @@ class InventoryItem extends Model
     {
         return [
             'price' => 'decimal:2',
+            'is_organic' => 'boolean',
+            'harvest_date' => 'date',
+            'expiry_date' => 'date',
+            'moisture_content' => 'decimal:2',
         ];
+    }
+
+    /**
+     * Get the rice variety for this inventory item.
+     */
+    public function riceVariety()
+    {
+        return $this->belongsTo(RiceVariety::class);
     }
 
     /**

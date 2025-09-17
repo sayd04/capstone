@@ -83,11 +83,19 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is a buyer.
+     * Check if user is a regular user (marketplace buyer).
      */
-    public function isBuyer(): bool
+    public function isUser(): bool
     {
-        return $this->role === 'buyer';
+        return $this->role === 'user';
+    }
+
+    /**
+     * Check if user can access marketplace as buyer.
+     */
+    public function canBuyFromMarketplace(): bool
+    {
+        return in_array($this->role, ['user', 'farmer', 'admin']);
     }
 
     /**
