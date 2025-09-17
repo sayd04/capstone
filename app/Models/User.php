@@ -21,6 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'phone',
+        'address',
     ];
 
     /**
@@ -43,6 +46,63 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'role' => 'string',
         ];
+    }
+
+    /**
+     * Get the fields owned by the user (for farmers).
+     */
+    public function fields()
+    {
+        return $this->hasMany(Field::class);
+    }
+
+    /**
+     * Get the orders placed by the user (for buyers).
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'buyer_id');
+    }
+
+    /**
+     * Get the sales made to this user (for buyers).
+     */
+    public function purchases()
+    {
+        return $this->hasMany(Sale::class, 'buyer_id');
+    }
+
+    /**
+     * Check if user is a farmer.
+     */
+    public function isFarmer(): bool
+    {
+        return $this->role === 'farmer';
+    }
+
+    /**
+     * Check if user is a regular user (marketplace buyer).
+     */
+    public function isUser(): bool
+    {
+        return $this->role === 'user';
+    }
+
+    /**
+     * Check if user can access marketplace as buyer.
+     */
+    public function canBuyFromMarketplace(): bool
+    {
+        return in_array($this->role, ['user', 'farmer', 'admin']);
+    }
+
+    /**
+     * Check if user is an admin.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
     }
 }
