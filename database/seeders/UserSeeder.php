@@ -13,15 +13,22 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        echo "Starting UserSeeder...\n";
+        
         // Create admin user
-        User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@farm.com',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-            'phone' => '+1234567890',
-            'address' => '123 Admin Street, Farm City, FC 12345',
-        ]);
+        try {
+            $user = User::create([
+                'name' => 'Admin User',
+                'email' => 'admin@farm.com',
+                'password' => Hash::make('password'),
+                'role' => 'admin',
+                'phone' => '+1234567890',
+                'address' => '123 Admin Street, Farm City, FC 12345',
+            ]);
+            echo "Created admin user: " . $user->name . "\n";
+        } catch (\Exception $e) {
+            echo "Error creating admin user: " . $e->getMessage() . "\n";
+        }
 
         // Create farmer users
         User::create([
